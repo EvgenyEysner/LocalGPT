@@ -1,0 +1,25 @@
+[project]
+name = "LLM-Backend"
+version = "0.1.0"
+description = "This is the backend for Locale LLM application"
+authors = [
+    { name = "Evgeny Eysner" },
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aerich>=0.9.2",
+    "asyncpg>=0.30.0",
+    "black>=25.11.0",
+    "fastapi>=0.121.1",
+    "httpx>=0.28.1", # is used as an HTTP client for Ollama
+    "psycopg2-binary>=2.9.11",
+    "python-multipart>=0.0.20",
+    "tortoise-orm>=0.25.1",
+    "uvicorn>=0.38.0",
+]
+
+[tool.aerich]
+tortoise_orm = "app.database.config.TORTOISE_ORM"
+location = "./migrations"
+src_folder = "./."
