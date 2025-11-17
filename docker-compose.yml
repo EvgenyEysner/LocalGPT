@@ -8,7 +8,7 @@ services:
     container_name: backend
     environment:
       - OLLAMA_URL=http://ollama:11434
-      - OLLAMA_MODEL=gpt-oss
+      - OLLAMA_MODEL=mistral
     env_file:
       - ./backend/.env
     ports:
@@ -18,7 +18,18 @@ services:
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
     depends_on:
       - db
-      - ollama
+    networks:
+      - llm-network
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    #    environment:
+    #      - VITE_APP_BACKEND_URL=http://backend:8000
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
     networks:
       - llm-network
 
@@ -39,16 +50,22 @@ services:
       - llm_data:/var/lib/postgresql/data/
     networks:
       - llm-network
-
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
     restart: unless-stopped
-    command: [ "serve" ]          # default port 11434
+    command: [ "serve" ]
     ports:
       - "11434:11434"
     volumes:
       - ollama-data:/root/.ollama
+    networks:
+      - llm-network
+    healthcheck:
+      test: [ "CMD", "ollama", "list" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   llm_data:

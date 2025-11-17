@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-export default function MessageInput({onSend, inputRef}) {
+export default function MessageInput({onSend, inputRef, isConnected = false}) {
     const [value, setValue] = useState("");
 
     const handleSubmit = (e) => {
@@ -17,11 +17,13 @@ export default function MessageInput({onSend, inputRef}) {
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 className="flex-1 p-3 border rounded-l focus:outline-none"
-                placeholder="Schreibe deine Nachricht…"
+                placeholder={isConnected ? "Schreibe deine Nachricht…" : "Verbinde…"}
+                disabled={!isConnected}
             />
             <button
                 type="submit"
-                className="p-3 bg-indigo-600 text-white rounded-r hover:bg-indigo-700"
+                className="p-3 bg-indigo-600 text-white rounded-r hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!isConnected}
             >
                 Senden
             </button>

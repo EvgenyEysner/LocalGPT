@@ -1,10 +1,9 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from tortoise import Tortoise
-
 from app.database.config import TORTOISE_ORM
 from app.database.register import register_tortoise
 from app.routes import conversation, message
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from tortoise import Tortoise
 
 app = FastAPI()
 

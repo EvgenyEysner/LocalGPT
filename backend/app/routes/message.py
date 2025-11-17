@@ -1,8 +1,7 @@
 import os
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-
 from app.database.models import Conversation, Message
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from services import ollama
 from services.websocket import ConnectionManager
 
@@ -38,7 +37,7 @@ async def websocket_endpoint(websocket: WebSocket, conv_id: int):
             try:
                 # Query Ollama
                 answer = await ollama.query_ollama(
-                    model=os.getenv("OLLAMA_MODEL", "gpt-oss"),
+                    model=os.getenv("OLLAMA_MODEL", "mistral"),
                     prompt=data
                 )
             except Exception as exc:
