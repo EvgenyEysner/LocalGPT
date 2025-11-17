@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import HTTPException, status, APIRouter
 from tortoise.exceptions import DoesNotExist
 
@@ -8,7 +10,7 @@ from app.schemas.conversation import ConversationSchema, ConversationCreate
 router = APIRouter()
 
 
-@router.post("/conversations", response_model=ConversationSchema)
+@router.post("/conversation", response_model=ConversationSchema)
 async def create(conversation: ConversationCreate) -> Conversation:
     try:
         conv = await crud.create_conversation(conversation)
@@ -16,6 +18,18 @@ async def create(conversation: ConversationCreate) -> Conversation:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
             detail="Conversation could not be created",
+        )
+    return conv
+
+
+@router.get("/conversations", response_model=List[ConversationSchema])
+async def get_conversations() -> List[Conversation]:
+    try:
+        conv = await crud.get_conversations()
+    except DoesNotExist:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            detail="Conversations could not be fetched",
         )
     return conv
 

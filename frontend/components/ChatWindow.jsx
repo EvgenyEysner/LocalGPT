@@ -10,6 +10,16 @@ export default function ChatWindow({convId}) {
     const retryCountRef = useRef(0);
     const reconnectTimerRef = useRef(null);
     const inputRef = useRef();
+    const messagesEndRef = useRef(null);
+
+    // Auto-scroll zu neuesten Messages
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const loadHistory = async () => {
         const data = await getConversation(convId);
@@ -102,12 +112,25 @@ export default function ChatWindow({convId}) {
     };
 
     return (
-        <div className="flex-1 flex flex-col p-4 overflow-hidden">
-            <div className="flex-1 overflow-y-auto mb-4">
-                {messages.map((m, i) => (
-                    <Message key={i} role={m.role} content={m.content}/>
-                ))}
+        <div className="flex-1 flex flex-col bg-white">
+            {/* Messages Container */}
+            <div className="flex-1 overflow-y-auto" ref={messagesEndRef}>
+                {messages.length === 0 ? (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="text-center">
+                            <p className="text-2xl font-semibold text-gray-900 mb-2">Willkommen bei LocalGPT</p>
+                            <p className="text-gray-500">Starten Sie ein neues Gespräch</p>
+                        </div>
+                    </div>
+                ) : (
+                    messages.map((m, i) => (
+                        <Message key={i} role={m.role} content={m.content}/>
+                    ))
+                )}
+                <div ref={messagesEndRef}/>
             </div>
+
+            {/* Input Area */}
             <MessageInput onSend={sendMessage} inputRef={inputRef} isConnected={isConnected}/>
         </div>
     );
