@@ -7,7 +7,7 @@ async def get_conversations():
 
 
 async def get_conversation(conv_id):
-    return await ConversationSchema.from_queryset_single(Conversation.get(id=conv_id))
+    return await Conversation.filter(id=conv_id).prefetch_related("messages").first()
 
 
 async def create_conversation(conversation):

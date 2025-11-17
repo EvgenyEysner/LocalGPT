@@ -5,7 +5,7 @@ from tortoise.exceptions import DoesNotExist
 
 import app.crud.conversation as crud
 from app.database.models import Conversation
-from app.schemas.conversation import ConversationSchema, ConversationCreate
+from app.schemas.conversation import ConversationSchema, ConversationCreate, ConversationMessageSchema
 
 router = APIRouter()
 
@@ -34,7 +34,7 @@ async def get_conversations() -> List[Conversation]:
     return conv
 
 
-@router.get("/conversations/{conv_id}", response_model=ConversationSchema)
+@router.get("/conversations/{conv_id}", response_model=ConversationMessageSchema)
 async def get_conversation(conv_id: int) -> Conversation:
     conv = await crud.get_conversation(conv_id)
     if not conv:

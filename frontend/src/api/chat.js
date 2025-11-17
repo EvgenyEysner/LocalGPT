@@ -19,3 +19,13 @@ export async function getConversation(convId) {
     if (!resp.ok) throw new Error("Cannot fetch conversation");
     return await resp.json();
 }
+
+export async function updateConversationTitle(convId, title) {
+    const resp = await fetch(`/api/v1/conversations/${convId}`, {
+        method: "PATCH",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({title})
+    });
+    if (!resp.ok) throw new Error("Cannot update conversation title");
+    return await resp.json();
+}
