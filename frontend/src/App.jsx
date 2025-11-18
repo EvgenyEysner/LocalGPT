@@ -25,7 +25,6 @@ export default function App() {
 
     useEffect(() => {
         loadConversations();
-        if (!conversationId) startNewChat();
     }, []);
 
     return (

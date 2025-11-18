@@ -71,13 +71,11 @@ export default function ChatWindow({convId, onTitleUpdate}) {
             console.log("WebSocket connected for conversation:", convId);
             setIsConnected(true);
 
-            // Lade History NACH WebSocket-Verbindung
-            loadHistory();
-
             // Reset Backoff
             retryCountRef.current = 0;
         };
-
+        // Lade History NACH WebSocket-Verbindung
+        loadHistory();
         socket.onmessage = (event) => {
             console.log("Received message:", event.data); // Debug
 
